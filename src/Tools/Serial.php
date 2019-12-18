@@ -21,9 +21,9 @@ class Serial extends AbstractController
     /**
      * Méthode utilisée pour les objets Products
      * Serialise l'objet et renvoie le résultat
-    **/
+    **/    
     
-    public function productSerialize($data) 
+    public function Serialize($data) 
     {
 
         $encoder = new JsonEncoder();
@@ -40,9 +40,9 @@ class Serial extends AbstractController
 
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
-        $productSerialize = $serializer->normalize($data, null, [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]);
+        $output = $serializer->normalize($data, null, [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]);
 
-        $response = new JsonResponse($productSerialize);
+        $response = new JsonResponse($output);
 
         return $response;
     }

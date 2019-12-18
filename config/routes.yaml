@@ -2,6 +2,28 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+
+# Routes de Product
 product_show:
-    path: /products/{product}
+    path: /products/{reference}
     controller: App\Controller\ProductController:show
+
+# Routes de User
+
+user_add:
+    path: /users/
+    controller: App\Controller\UserController:create
+    methods: POST
+
+user_show:
+    path: /users/{username}
+    controller: App\Controller\UserController:show
+
+user_showFilterCustomer:
+    path: /users/customer/{name}
+    controller: App\Controller\UserController:showFilterCustomer
+
+user_delete:
+    path: /users/
+    controller: App\Controller\UserController:delete
+    methods: DELETE

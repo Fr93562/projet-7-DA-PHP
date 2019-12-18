@@ -8,6 +8,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Brand;
 use App\Entity\Storage;
 use App\Entity\Product;
+use App\Entity\Customer;
+use App\Entity\User;
 
 class AppFixtures extends Fixture
 {
@@ -21,15 +23,6 @@ class AppFixtures extends Fixture
         $brand2->setName("SamsungTest");
         $manager->persist($brand2);
 
-        // Création de fixtures de storage
-        $store = new Storage();
-        $store->setCapacity(16);
-        $manager->persist($store);
-
-        $store2 = new Storage();
-        $store2->setCapacity(0);
-        $manager->persist($store2);
-
         // Création de fixtures de product
         $product = new Product();
         $product->setReference("GalaxyFake10");
@@ -37,7 +30,7 @@ class AppFixtures extends Fixture
         $product->setDelay(3);
         $product->setPrice(400);
         $product->setBrand($brand2);
-        $product->setStorage($store);
+        $product->setStorage(16);
         $manager->persist($product);
 
         $product2 = new Product();
@@ -46,8 +39,34 @@ class AppFixtures extends Fixture
         $product2->setDelay(3);
         $product2->setPrice(1999);
         $product2->setBrand($brand);
-        $product2->setStorage($store);
+        $product2->setStorage(32);
         $manager->persist($product2);
+
+        // Creation de fixture customer
+
+        $customer1 = new Customer();
+        $customer1->setName("FakeBouygue");
+        $customer1->setToken("falseToken");
+        //$customer1->setDateLimit(new DateTime('2000-01-01'));
+        $manager->persist($customer1);
+        
+        $customer2= new Customer();
+        $customer2->setName("FakeSFR");
+        $customer2->setToken("nonJeSuisToujoursPasUnToken");
+        //$customer1->setDateLimit(new DateTime('2000-01-01'));
+        $manager->persist($customer2);
+        
+        // Creation de fixture user
+        
+        $user = new User();
+        $user->setName("Licorne");
+        $user->setUsername("Dorée");
+        $user->setMail("licorne@fakemail.li");
+        $user->setNumber("06 15 10 15 50");
+        $user->setAddress("fake adress");
+        $user->setCustomer($customer1);
+        
+        $manager->persist($user);
 
         $manager->flush();
     }

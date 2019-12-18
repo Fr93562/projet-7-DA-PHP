@@ -29,6 +29,11 @@ class Product
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    private $storage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
     private $delay;
 
     /**
@@ -46,12 +51,6 @@ class Product
      * @ORM\JoinColumn(nullable=false)
      */
     private $brand;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Storage", inversedBy="product")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $storage;
 
     public function getId(): ?int
     {
@@ -118,6 +117,18 @@ class Product
         return $this;
     }
 
+    public function getStorage(): ?int
+    {
+        return $this->storage;
+    }
+
+    public function setStorage(?int $storage): self
+    {
+        $this->storage = $storage;
+        
+        return $this;
+    }
+
     public function getBrand(): ?Brand
     {
         return $this->brand;
@@ -130,15 +141,4 @@ class Product
         return $this;
     }
 
-    public function getStorage(): ?Storage
-    {
-        return $this->storage;
-    }
-
-    public function setStorage(?Storage $storage): self
-    {
-        $this->storage = $storage;
-
-        return $this;
-    }
 }

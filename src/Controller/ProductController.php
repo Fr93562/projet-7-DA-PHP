@@ -25,21 +25,18 @@ class ProductController extends AbstractController
      * Renvoie un produit sous forme d'une requête JSON
      * Récupère l'objet en base. Puis le passage en argument par le service Serial au niveau de la réponse
      * 
-     * @Route("/products/{product}", name="product_show", methods={"GET","HEAD"})
+     * @Route("/products/{reference}", name="product_show", methods={"GET","HEAD"})
      */
-    public function show(string $product)
+    public function show(string $reference)
     {
 
         $productsRepository = $this->getDoctrine()->getRepository(Product::class);
-        $product = $productsRepository->findOneByReference($product);
+        $product = $productsRepository->findOneByReference($reference);
 
         $response = new Serial(); 
+        return $response->Serialize($product);
 
-        return $this->render('product/index.html.twig', [
-            'response' => $response->productSerialize($product),
-        ]);
     }
-
 
     /**
      * Renvoie la liste des produits sous forme d'une requête JSON
@@ -54,9 +51,6 @@ class ProductController extends AbstractController
         $products = $productsRepository->findAll();
 
         $response = new Serial(); 
-
-        return $this->render('product/index.html.twig', [
-            'response' => $response->productSerialize($products),
-        ]);
+        return $response->Serialize($products);
     }
 }
