@@ -15,14 +15,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\Product;
 
+/**
+ * Gère la sérialisation
+ */ 
 class Serial extends AbstractController
 {
 
     /**
-     * Méthode utilisée pour les objets Products
-     * Serialise l'objet et renvoie le résultat
-    **/    
-    
+     * Méthode utilisée pour sérailiser entités
+    **/  
     public function Serialize($data) 
     {
 

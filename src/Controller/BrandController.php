@@ -14,24 +14,22 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-
 use App\Service\Serial;
-use App\Entity\User;
-use App\Entity\Client;
+use App\Entity\Product;
 use App\Entity\Brand;
-use App\Form\ProductType;
+use App\Form\BrandType;
 
 /**
- * Gère les paths de l'objet Customer, permet le CRUD de cet objet
+ * Gère les paths de l'objet Brand, permet le CRUD de cet objet
  */
-class UserController extends AbstractController
+class BrandController extends AbstractController
 {
-
+    
     /**
      * Récupère la requête et crée un objet Brand en base de données
      * 
      * @IsGranted("ROLE_ADMIN")
-     * @Route("/users/", name="user_add", methods={"POST"})
+     * @Route("/brands/", name="brand_add", methods={"POST"})
      */
     public function create(Request $request)
     {
@@ -40,19 +38,16 @@ class UserController extends AbstractController
         $jsonContent = new Serial();
         $output = null;
 
-        $user = new Client();
-        $user   ->setName($data->{'name'})
-                    ->setRoles($data->{'role'})
-                    ->setPassword($data->{'password'})
-        ;
+        $brand = new Brand();
+        $brand->setName($data->{'name'});
 
-        //$form = $this->createForm(BrandType::class, $brand);        
+        $form = $this->createForm(BrandType::class, $brand);        
         $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
+        $em->persist($brand);
         $em->flush();
 
         $response = new Response("Created", 201);
-        $output = $user;
+        $output = $brand;
 
         return $response->setContent($jsonContent->Serialize($output));
     }
@@ -61,55 +56,50 @@ class UserController extends AbstractController
     /**
      * Affiche tout les objets Brand en base de données
      * 
-     * @IsGranted("ROLE_ADMIN")
-     * @Route("/users", name="user_showAll", methods={"GET","HEAD"})
+     * @IsGranted("ROLE_USER")
+     * @Route("/brands", name="product_showAll", methods={"GET","HEAD"})
      */
     public function showAll()
     {
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->findAll();
+        $brandsRepository = $this->getDoctrine()->getRepository(Brand::class);
+        $brand = $brandsRepository->findAll();
 
         $response = new Serial(); 
-        return $response->Serialize($user);
+        return $response->Serialize($brand);
     }
 
     /**
      * Supprime un objet Brand de la base de données
      * 
      * @IsGranted("ROLE_ADMIN")
-     * @Route("/users/", name="user_delete", methods={"DELETE"})
+     * @Route("/brands/", name="brand_delete", methods={"DELETE"})
      */
     public function delete(Request $request)
     {
-        $data = json_decode($request->query->get('Content-Type'));
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->findOneByName($data->{'name'});
+        $data = json_decode($request->query->getContent(), true);
+        $brandsRepository = $this->getDoctrine()->getRepository(Brand::class);
+        $brand = $brandsRepository->findOneByName($data['name']);
 
 
-        $clientsRepository = $this->getDoctrine()->getRepository(Client::class);
-        $clients = $clientsRepository->findByEntreprise($user);
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+        $product = $productRepository->findByBrand($brand);
 
         $jsonContent = new Serial();
         $output = null;
 
-        if(!is_null($clients)) {
-
-            foreach ($clients as $client){
-                $client->setUser(null);
-            }
+        if(!is_null($product)) {
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($clients);
-            $em->remove($entreprise);
+            $em->remove($brand);
             $em->flush();
 
             $response = new Response("OK", 200);
-            $output = "Le client a bien été supprimé.";
+            $output = "Le brand a bien été supprimé.";
 
         } else {
 
             $response = new Response("Not found", 404);
-            $output = "L'user n'a pas été supprimé. Des clients en lien avec existent.";
+            $output = "Brand n'a pas été supprimé. Des users en lien avec existent.";
         }
 
         return $response->setContent($jsonContent->Serialize($output));

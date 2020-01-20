@@ -4,9 +4,57 @@
 
 
 # Routes de Product
+
+product_add:
+    path: /products/
+    controller: App\Controller\ProductController:create
+    methods: POST
+
 product_show:
     path: /products/{reference}
     controller: App\Controller\ProductController:show
+
+product_delete:
+    path: /products/
+    controller: App\Controller\ProductController:delete
+    methods: DELETE
+
+# Routes de Brand
+
+brand_add:
+    path: /brands/
+    controller: App\Controller\BrandController:create
+    methods: POST
+
+brand_showAll:
+    path: /brands
+    controller: App\Controller\BrandController:showAll
+    methods: GET
+
+brand_delete:
+    path: /brands/
+    controller: App\Controller\BrandController:delete
+    methods: DELETE
+
+# Routes de Client
+
+client_add:
+    path: /clients/
+    controller: App\Controller\ClientController:create
+    methods: POST
+
+client_show:
+    path: /clients/{username}
+    controller: App\Controller\ClientController:show
+
+client_showFilterCustomer:
+    path: /clients/user/{name}
+    controller: App\Controller\ClientController:showFilterCustomer
+
+client_delete:
+    path: /clients/
+    controller: App\Controller\ClientController:delete
+    methods: DELETE
 
 # Routes de User
 
@@ -15,15 +63,19 @@ user_add:
     controller: App\Controller\UserController:create
     methods: POST
 
-user_show:
-    path: /users/{username}
-    controller: App\Controller\UserController:show
-
-user_showFilterCustomer:
-    path: /users/customer/{name}
-    controller: App\Controller\UserController:showFilterCustomer
+user_showAll:
+    path: /users
+    controller: App\Controller\UserController:showAll
+    methods: GET
 
 user_delete:
     path: /users/
     controller: App\Controller\UserController:delete
     methods: DELETE
+
+# Route de login
+
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController:login
+    methods: POST
